@@ -10,7 +10,8 @@ app = FastAPI(title="PostMorph AI")
 # Setup CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL, "*"], # Allow frontend specifically and fallback to *
+    allow_origins=[settings.FRONTEND_URL,   "http://localhost:5173",
+        "https://cross-post-ai.vercel.app",], # Allow frontend specifically and fallback to *
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
