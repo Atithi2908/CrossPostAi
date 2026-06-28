@@ -24,14 +24,12 @@ async def verify_automation_auth(
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
         try:
-            # We don't need the actual user object, just need to know it doesn't throw an error
-            # We'll just call get_current_user logic directly or rely on the fact that if this passes, they are logged in.
-            # Actually, to make it simple without replicating token decode logic:
-            from core.security import verify_token
+            from jose import jwt
             token = auth_header.split(" ")[1]
-            token_data = verify_token(token)
-            if token_data:
-                return {"auth_type": "user", "user_id": token_data.sub}
+            payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+            user_id = payload.get("sub")
+            if user_id:
+                return {"auth_type": "user", "user_id": user_id}
         except Exception:
             pass
             
