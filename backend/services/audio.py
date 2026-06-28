@@ -17,7 +17,8 @@ class AudioService:
         audio_path = os.path.join(settings.CACHE_DIR, f"{base_name}.mp3")
         
         if os.path.exists(audio_path):
-            logger.info(f"Audio already extracted: {audio_path}")
+            audio_size = os.path.getsize(audio_path)
+            logger.info(f"Using cached audio\nAudio Path: {audio_path}\nAudio Size: {audio_size} bytes")
             return audio_path
             
         try:
@@ -39,7 +40,16 @@ class AudioService:
                 logger.error(f"FFmpeg failed: {result.stderr}")
                 raise RuntimeError(f"FFmpeg failed to extract audio: {result.stderr}")
                 
-            logger.info(f"Audio successfully extracted to {audio_path}")
+            audio_exists = os.path.exists(audio_path)
+            audio_size = os.path.getsize(audio_path) if audio_exists else 0
+            
+            logger.info(
+                f"Audio extracted successfully\n"
+                f"Audio Path: {audio_path}\n"
+                f"Audio Exists: {audio_exists}\n"
+                f"Audio Size: {audio_size} bytes\n"
+                f"FFmpeg Executable: {ffmpeg_exe}"
+            )
             return audio_path
             
         except Exception as e:
