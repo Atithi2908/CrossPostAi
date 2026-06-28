@@ -101,16 +101,3 @@ def run_single_cycle() -> dict:
         
     logger.info(f"Automation cycle completed. Summary: {summary}")
     return summary
-
-async def start_worker():
-    logger.info("Background automation worker started.")
-    try:
-        while True:
-            # Run in a separate thread so it doesn't block the async event loop
-            await asyncio.to_thread(run_single_cycle)
-            
-            logger.info("Worker sleeping for 15 minutes...")
-            await asyncio.sleep(15 * 60)
-            
-    except asyncio.CancelledError:
-        logger.info("Background automation worker stopped gracefully.")

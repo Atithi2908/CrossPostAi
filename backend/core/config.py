@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     DEEPGRAM_API_KEY: str | None = None
     GEMINI_API_KEY: str | None = None
     GROQ_API_KEY: str | None = None
+    AUTOMATION_API_KEY: str | None = None
 
     INSTAGRAM_CLIENT_ID: str | None = None
     INSTAGRAM_CLIENT_SECRET: str | None = None

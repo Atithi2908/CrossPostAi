@@ -3,24 +3,9 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from api import instagram, linkedin, pipeline, auth, automation
-from services.worker import start_worker
 import traceback
-import asyncio
-from contextlib import asynccontextmanager
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Start the automation worker in the background
-    worker_task = asyncio.create_task(start_worker())
-    yield
-    # Cancel the worker on shutdown
-    worker_task.cancel()
-    try:
-        await worker_task
-    except asyncio.CancelledError:
-        pass
-
-app = FastAPI(title="PostMorph AI", lifespan=lifespan)
+app = FastAPI(title="PostMorph AI")
 
 # Setup CORS
 app.add_middleware(
