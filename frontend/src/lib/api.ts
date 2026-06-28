@@ -21,7 +21,12 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  // Safely join URL and endpoint avoiding double slashes
+  const baseUrl = API_URL.replace(/\/+$/, "");
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const fetchUrl = `${baseUrl}${cleanEndpoint}`;
+
+  const response = await fetch(fetchUrl, {
     ...options,
     headers,
   });
